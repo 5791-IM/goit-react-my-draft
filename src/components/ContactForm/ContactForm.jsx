@@ -1,6 +1,6 @@
-/* eslint-disable react/prop-types */
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
+import { nanoid } from "nanoid";
 import css from "./ContactForm.module.css";
 
 const ContactForm = ({ onAddContact }) => {
@@ -9,25 +9,26 @@ const ContactForm = ({ onAddContact }) => {
     number: "",
   };
 
-  const validationSchema = Yup.object().shape({
+  const validationSchema = Yup.object({
     name: Yup.string()
-      .required("Name is required")
-      .min(3, "Too short")
-      .max(50, "Too long"),
+      .min(3, "Name must be at least 3 characters")
+      .max(50, "Name must be 50 characters or less")
+      .required("Name is required"),
     number: Yup.string()
-      .required("Number is required")
-      .min(3, "Too short")
-      .max(50, "Too long"),
+      .min(3, "Number must be at least 3 characters")
+      .max(50, "Number must be 50 characters or less")
+      .required("Number is required"),
   });
 
-  const handleSubmit = (values, { resetForm }) => {
+  const handleSubmit = (values, { reserForm }) => {
     const newContact = {
-      id: Math.random().toString(36).slice(2, 11),
+      id: nanoid(),
       name: values.name,
       number: values.number,
     };
+
     onAddContact(newContact);
-    resetForm();
+    reserForm();
   };
 
   return (
@@ -36,39 +37,23 @@ const ContactForm = ({ onAddContact }) => {
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
     >
-      <Form className={css.ContactForm}>
-        <label className={css.ContactFormLabel} htmlFor="name">
-          <span className={css.ContactFormSpan}>Name:</span>
-          <Field
-            className={css.ContactFormField}
-            type="text"
-            id="name"
-            name="name"
-          />
-          <ErrorMessage
-            className={css.ContactFormSpan}
-            name="name"
-            component="div"
-          />
-        </label>
-        <label className={css.ContactFormLabel} htmlFor="number">
-          <span className={css.ContactFormSpan}>Number:</span>
-          <Field
-            className={css.ContactFormField}
-            type="text"
-            id="number"
-            name="number"
-          />
-          <ErrorMessage
-            className={css.ContactFormSpan}
-            name="number"
-            component="div"
-          />
-        </label>
-        <button className={css.ContactFormBtn} type="submit">
-          Add contact
-        </button>
-      </Form>
+      {({ isSubmitting }) => (
+        <Form className={css.form}>
+          <label className={css.label}>
+            Name
+            <Field type="text" name="name" className={css.input} />
+            <ErrorMessage name="name" component="div" className={css.error} />
+          </label>
+          <label className={css.label}>
+            Number
+            <Field type="text" name="number" className={css.input} />
+            <ErrorMessage name="number" component="div" className={css.error} />
+          </label>
+          <button type="submit" className={css.button} disabled={isSubmitting}>
+            Add Contact
+          </button>
+        </Form>
+      )}
     </Formik>
   );
 };

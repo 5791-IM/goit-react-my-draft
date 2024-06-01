@@ -1,60 +1,48 @@
 import { useEffect, useState } from "react";
-import "./App.css";
+import ContactList from "../ContactList/ContactList";
 import ContactForm from "../ContactForm/ContactForm";
 import SearchBox from "../SearchBox/SearchBox";
-import contactsUser from "/src/contactsUser.json";
-import { nanoid } from "nanoid";
-import ContactList from "../ContactList/ContactList";
+import initialContacts from "../../contactsUser.json";
+import css from "./App.module.css";
 
-function App() {
+const LOCAL_STORAGE_KEY = "contacts";
+
+export default function App() {
   const [contacts, setContacts] = useState(() => {
-    const stringifiedContacts = localStorage.getItem("contacts");
-    if (!stringifiedContacts) return contactsUser;
-
-    const parsedContacts = JSON.parse(stringifiedContacts);
-    return parsedContacts;
+    const savedContacts = localStorage.getItem(LOCAL_STORAGE_KEY);
+    return savedContacts ? JSON.parse(savedContacts) : initialContacts;
   });
 
   const [filter, setFilter] = useState("");
 
   useEffect(() => {
-    localStorage.setItem("contacts", JSON.stringify(contacts));
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(contacts));
   }, [contacts]);
 
-  const onAddContact = (formData) => {
-    const finalUser = {
-      ...formData,
-      id: nanoid(),
-    };
-
-    setContacts((prevState) => [...prevState, finalUser]);
+  const addContact = (newContact) => {
+    setContacts((prevContacts) => [...prevContacts, newContact]);
   };
 
-  const onDeleteContact = (contactId) => {
-    setContacts((prevContacts) =>
-      prevContacts.filter((contact) => contact.id !== contactId)
-    );
+  const deleteContact = (contactId) => {
+    setContacts((prevContacts) => {
+      return prevContacts.filter((contact) => contact.id !== contactId);
+    });
   };
 
-  const onChangeFilter = (event) => {
-    setFilter(event.target.value);
+  const handleFilterChange = (value) => {
+    setFilter(value);
   };
 
-  const filteredContacts = contacts.filter((contact) =>
-    contact.name?.toLowerCase().includes(filter.toLowerCase())
+  const visibleContacts = contacts.filter((contact) =>
+    contact.name.toLowerCase().includes(filter.toLowerCase())
   );
 
   return (
-    <div>
+    <div className={css.container}>
       <h1>Phonebook</h1>
-      <ContactForm onAddContact={onAddContact} />
-      <SearchBox onChangeFilter={onChangeFilter} filter={filter} />
-      <ContactList
-        contacts={filteredContacts}
-        onDeleteContact={onDeleteContact}
-      />
+      <ContactForm onAddContact={addContact} />
+      <SearchBox value={filter} onChange={handleFilterChange} />
+      <ContactList contacts={visibleContacts} onDelete={deleteContact} />
     </div>
   );
 }
-
-export default App;

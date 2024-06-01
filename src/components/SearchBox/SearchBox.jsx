@@ -1,20 +1,16 @@
-/* eslint-disable react/prop-types */
-
 import css from "./SearchBox.module.css";
 
-const SearchBox = ({ onChangeFilter, filter }) => {
+export default function SearchBox({ value, onChange }) {
   return (
-    <label className={css.SearchBox}>
-      <span className={css.SearchTitle}>Find contacts by name</span>
+    <div>
+      <p className={css.label}>Find contacts by name</p>
       <input
-        className={css.SearchInput}
-        type="name"
-        name="findUser"
-        onChange={onChangeFilter}
-        value={filter}
+        type="text"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        // placeholder="Search contacts"
+        className={css.searchBox}
       />
-    </label>
+    </div>
   );
-};
-
-export default SearchBox;
+}

@@ -1,47 +1,48 @@
-.ContactForm {
-  max-width: 400px;
-  margin: 0 auto;
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.ContactFormLabel {
-  display: block;
-  margin-bottom: 15px;
-}
-
-.ContactFormSpan {
-  display: block;
-  margin-bottom: 5px;
+.label {
+  display: flex;
+  flex-direction: column;
   font-weight: bold;
 }
 
-.ContactFormField {
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  border: 3px solid #513939;
-  border-radius: 5px;
-  background-color: rgb(166, 163, 168);
-  box-sizing: border-box;
+.input {
+  width: 250px;
+  height: 40px;
+  padding: 5px;
+  margin-top: 5px;
+  border: 1px solid #afaaaa;
+  border-radius: 8px;
 }
 
-.ContactFormBtn {
-  display: block;
-  width: 100%;
+.input:hover,
+.input:focus {
+  border-color: #6a6666;
+  outline: none;
+}
+
+.error {
+  color: red;
+  font-size: 12px;
+}
+
+.button {
+  width: 150px;
   padding: 10px;
-  background-color: #a26a6a;
-  color: #513939;
-  border: 3px solid #513939;
-  border-radius: 5px;
-  font-size: 16px;
+  background-color: #ccc;
+  color: black;
+  border: 1px solid #afaaaa;
+  border-radius: 8px;
   cursor: pointer;
 }
 
-.ContactFormBtn:hover {
-  background-color: #c28e8e;
-}
-
-.ErrorMessage {
-  color: #9d6565;
-  font-size: 14px;
-  margin-top: 5px;
+.button:hover,
+.button:focus {
+  background-color: #ece2e2;
+  border-color: #6a6666;
+  outline: none;
 }

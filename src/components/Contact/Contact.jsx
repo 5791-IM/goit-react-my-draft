@@ -1,23 +1,13 @@
-/* eslint-disable react/prop-types */
-
 import css from "./Contact.module.css";
 
-const Contact = ({ contact, onDeleteContact }) => {
+export default function Contact({ data: { id, name, number }, onDelete }) {
   return (
-    <>
-      <li className={css.ContactItem}>
-        <p className={css.ContactName}>{contact.name}</p>
-        <p className={css.ContactNumber}>{contact.number}</p>
-        <button
-          className={css.ContactItemBtn}
-          type="button"
-          onClick={() => onDeleteContact(contact.id)}
-        >
-          Delete
-        </button>
-      </li>
-    </>
+    <div className={css.contact}>
+      <p className={`${css.text} ${css.name}`}>{name}</p>
+      <p className={`${css.text} ${css.number}`}>{number}</p>
+      <button className={css.btn} onClick={() => onDelete(id)}>
+        Delete
+      </button>
+    </div>
   );
-};
-
-export default Contact;
+}
